@@ -71,7 +71,7 @@ function App() {
             }
           }}
           onChange={_handleEditorChange}
-          value={state.saved ? "" : state.content}
+          value={state.saved ? "" : state.content} 
         />
         <div>
 
