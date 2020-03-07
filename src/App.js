@@ -1,10 +1,12 @@
 import React from 'react';
 import { Editor } from '@tinymce/tinymce-react'
 import './App.css';
+import renderHTML from 'react-render-html';
 
 function App() {
   const [state, setState] = React.useState({
-    content: ""
+    content: "",
+    saved: false
   })
   const _handleEditorChange = e => {
     // console.log('Content was updated:', e.target)
@@ -15,6 +17,8 @@ function App() {
     //Let push state.content which you got to server
     //can view result at console window :)
     console.log(state.content)
+    setState({...state,saved : true})
+
   }
   console.log(window.tinymce)
   return (
@@ -73,6 +77,10 @@ function App() {
         <div>
 
           <button onClick={_handSave}>Save</button>
+
+        </div>
+        <div>
+          {state.saved && state.content !== '' && renderHTML(state.content)}
         </div>
       </div>
     </div>
