@@ -20,7 +20,6 @@ function App() {
     setState({...state,saved : true})
 
   }
-  console.log(window.tinymce)
   return (
     <div className="App">
       <div style={{ width: '100%' }}>
@@ -72,7 +71,7 @@ function App() {
             }
           }}
           onChange={_handleEditorChange}
-          value={state.content}
+          value={state.saved ? "" : state.content}
         />
         <div>
 
@@ -80,7 +79,7 @@ function App() {
 
         </div>
         <div>
-          {state.saved && state.content !== '' && renderHTML(state.content)}
+          {state.saved && state.content !== '' && renderHTML(state.content) }
         </div>
       </div>
     </div>
