@@ -21,9 +21,6 @@ function App() {
     setState({ ...state, content: e.target.getContent() })
   }
 
-
-
-
   const _handSave = () => {
     //Let push state.content which you got to server
     //can view result at console window :)
