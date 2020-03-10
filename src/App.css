@@ -6,6 +6,10 @@
   height: 40vmin;
   pointer-events: none;
 }
+.disabledbutton {
+  pointer-events: none;
+  opacity: 0.4;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

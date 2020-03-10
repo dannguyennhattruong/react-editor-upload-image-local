@@ -2,9 +2,12 @@ import React from 'react';
 import { Editor } from '@tinymce/tinymce-react'
 import './App.css';
 import renderHTML from 'react-render-html';
+import axios from 'axios'
+// import Loading from './Loading';
 var h2m = require('h2m')
 const cloudName = 'nonenone25251325zz';
 const unsignedUploadPreset = 'adz8s31b';
+
 
 
 function App() {
@@ -14,7 +17,8 @@ function App() {
     post: {
       description: ""
     },
-    urlImage: ''
+    urlImage: '',
+    loading: false
   })
   const _handleEditorChange = e => {
     console.log('Content was updated:', h2m(e.target.getContent()))
@@ -29,6 +33,18 @@ function App() {
 
   }
 
+  React.useEffect(() => {
+    const input = document.getElementsByTagName("input")
+    if (state.loading && input) {
+
+      input.disabled = true
+    }
+    else if (!state.loading && input) {
+      input.disabled = false
+    }
+  })
+
+
   return (
     <div className="App">
       <div style={{ width: '100%' }}>
@@ -39,6 +55,10 @@ function App() {
             height: 600,
             menubar: true,
             config: {},
+            skin: 'oxide-dark',
+            content_css: 'dark',
+            images_upload_base_path: `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+            images_upload_credentials: true,
             plugins: [
               'advlist autolink lists link image charmap print preview anchor',
               'searchreplace visualblocks code fullscreen',
@@ -94,12 +114,29 @@ function App() {
                   xhr.send(fd);
 
                 };
-                reader.readAsDataURL(file);
 
+                reader.readAsDataURL(file);
               };
 
               input.click();
-            }
+            },
+            images_upload_handler: (blobInfo, success, failure) => {
+              let data = new FormData();
+              var reader = new FileReader();
+              // var file = this.files[0];
+              var url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+              data.append('file', blobInfo.blob(), blobInfo.filename());
+              data.append('upload_preset', unsignedUploadPreset);
+              data.append('tags', 'browser_upload');
+              axios.post(url, data)
+                .then(function (res) {
+                  success(res.data.secure_url)
+                })
+                .catch(function (err) {
+                  console.log(err)
+                });
+              reader.readAsDataURL(blobInfo.blob())
+            },
           }}
 
           onChange={_handleEditorChange}
